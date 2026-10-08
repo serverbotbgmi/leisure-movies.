@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>VMX Stream</title>
+  <title>VMX</title>
   <meta name="theme-color" content="#070709" />
   <link rel="manifest" href="manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   
   <style>
     :root {
       --bg: #070709;
-      --card-bg: #121217;
+      --card-bg: #141419;
       --vmx-blue: #0084ff;
       --vmx-orange: #ff7700;
       --vmx-gold: #ffaa00;
@@ -32,23 +32,24 @@
     body {
       background-color: var(--bg);
       color: #ffffff;
-      padding-bottom: 74px;
+      padding-bottom: 70px;
       overflow-x: hidden;
       user-select: none;
     }
 
-    /* VMX Top Bar */
+    /* Fixed Header */
     header {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 52px;
+      height: 54px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 16px;
-      background: linear-gradient(180deg, rgba(7,7,9,0.95) 0%, rgba(7,7,9,0.5) 75%, transparent 100%);
+      background: linear-gradient(180deg, rgba(7,7,9,0.96) 0%, rgba(7,7,9,0.7) 70%, transparent 100%);
+      backdrop-filter: blur(8px);
       z-index: 100;
     }
 
@@ -64,8 +65,9 @@
     .header-links {
       display: flex;
       gap: 16px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
+      letter-spacing: 0.5px;
     }
     .header-links span {
       color: var(--text-gray);
@@ -74,19 +76,19 @@
     .header-links span.active {
       color: #fff;
       border-bottom: 2px solid var(--vmx-orange);
-      padding-bottom: 3px;
+      padding-bottom: 2px;
     }
 
-    /* Screen Views Manager */
-    .screen-view {
+    /* Tab Pages */
+    .screen-page {
       display: none;
       min-height: 100vh;
     }
-    .screen-view.active {
+    .screen-page.active-page {
       display: block;
     }
 
-    /* Sticky Video Player */
+    /* Sticky Video Frame */
     #player-wrap {
       display: none;
       position: sticky;
@@ -94,7 +96,7 @@
       width: 100%;
       aspect-ratio: 16/9;
       background: #000;
-      z-index: 150;
+      z-index: 200;
       box-shadow: 0 8px 24px rgba(0,0,0,0.9);
     }
     #video-frame {
@@ -109,22 +111,22 @@
       width: 100%;
       height: 480px;
       background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(7,7,9,0.65) 60%, var(--bg) 100%),
-                  url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80') center/cover;
+                  url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80') center/cover;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       align-items: center;
-      padding: 0 16px 20px;
+      padding: 0 16px 22px;
       text-align: center;
     }
 
     .hero-title {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 900;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       margin-bottom: 6px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.9);
     }
 
     .hero-meta {
@@ -180,13 +182,13 @@
       cursor: pointer;
     }
 
-    /* Rails and Sections */
+    /* Horizontal Carousels */
     .section-head {
       font-size: 13px;
       font-weight: 800;
       letter-spacing: 1px;
       text-transform: uppercase;
-      padding: 22px 16px 10px;
+      padding: 24px 16px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -204,12 +206,13 @@
       overflow-x: auto;
       padding: 0 16px;
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
     }
     .carousel-rail::-webkit-scrollbar {
       display: none;
     }
 
-    /* Standard Poster Card */
+    /* Poster Card */
     .poster-card {
       flex: 0 0 115px;
       position: relative;
@@ -268,7 +271,7 @@
       color: #eee;
     }
 
-    /* Numbered TOP 10 Rail */
+    /* Top 10 Today */
     .top10-item {
       flex: 0 0 145px;
       position: relative;
@@ -294,9 +297,9 @@
       border: 1px solid var(--border);
     }
 
-    /* SEARCH SCREEN (Screenshot 38614) */
-    #search-view {
-      padding: 60px 16px 20px;
+    /* Search Screen */
+    #search-page {
+      padding: 68px 16px 20px;
     }
     .search-input-box {
       width: 100%;
@@ -342,23 +345,18 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .genre-pill:active {
-      background: var(--vmx-orange);
-      border-color: var(--vmx-orange);
-    }
 
-    /* DOWNLOADS SCREEN (Screenshot 38613) */
-    #downloads-view {
-      padding: 70px 24px 20px;
+    /* Downloads Screen */
+    #downloads-page {
+      padding: 90px 24px 20px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 80vh;
     }
     .dl-title {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 900;
       margin-bottom: 14px;
     }
@@ -383,9 +381,9 @@
       box-shadow: 0 4px 16px rgba(0, 132, 255, 0.35);
     }
 
-    /* PROFILE SCREEN (Screenshot 38612) */
-    #profile-view {
-      padding: 70px 20px 20px;
+    /* Profile Screen */
+    #profile-page {
+      padding: 68px 20px 20px;
     }
     .profile-guest-name {
       font-size: 28px;
@@ -431,175 +429,7 @@
       font-weight: 600;
     }
 
-    /* FULL VMX LOGIN MODAL (Screenshot 38610) */
-    #login-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: #000;
-      z-index: 400;
-      overflow-y: auto;
-      padding: 30px 20px 40px;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      text-align: center;
-    }
-    .login-top-explore {
-      align-self: flex-end;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--vmx-blue);
-      cursor: pointer;
-    }
-    .login-center-box {
-      margin: auto 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .login-vmx-logo {
-      font-size: 46px;
-      font-weight: 900;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
-    }
-    .login-headline {
-      font-size: 17px;
-      font-weight: 800;
-      line-height: 1.4;
-      max-width: 300px;
-      margin-bottom: 30px;
-    }
-    .btn-login-cta {
-      width: 100%;
-      max-width: 310px;
-      background: var(--vmx-blue);
-      color: #fff;
-      font-size: 15px;
-      font-weight: 800;
-      padding: 14px;
-      border-radius: 25px;
-      border: none;
-      margin-bottom: 20px;
-      cursor: pointer;
-    }
-    .login-signup-txt {
-      font-size: 13px;
-      color: var(--text-gray);
-      font-weight: 600;
-    }
-    .login-signup-txt span {
-      color: var(--vmx-orange);
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .login-terms {
-      font-size: 10px;
-      color: var(--text-gray);
-      margin-top: 30px;
-      line-height: 1.5;
-    }
-    .login-terms a {
-      color: var(--vmx-blue);
-      text-decoration: underline;
-    }
-    .login-restore {
-      margin-top: 14px;
-      font-size: 11px;
-      font-weight: 800;
-      color: #5c6280;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-    }
-
-    /* GDPR / DATA CONSENT POPUP (Screenshot 38611) */
-    #consent-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      z-index: 500;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .consent-card {
-      background: #ffffff;
-      color: #000;
-      border-radius: 16px;
-      padding: 24px 20px;
-      width: 100%;
-      max-width: 330px;
-      position: relative;
-    }
-    .consent-close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      background: #eee;
-      border: none;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .consent-vmx-icon {
-      background: #000;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 900;
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 12px;
-    }
-    .consent-title {
-      font-size: 14px;
-      font-weight: 800;
-      text-align: center;
-      line-height: 1.35;
-      margin-bottom: 16px;
-    }
-    .consent-item {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 14px;
-      font-size: 11px;
-      line-height: 1.3;
-      color: #444;
-      text-align: left;
-    }
-    .btn-consent-agree {
-      background: var(--vmx-blue);
-      color: #fff;
-      font-weight: 800;
-      font-size: 13px;
-      width: 100%;
-      padding: 12px;
-      border-radius: 20px;
-      border: none;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-    .btn-consent-manage {
-      background: #f0f0f5;
-      color: #222;
-      font-weight: 700;
-      font-size: 12px;
-      width: 100%;
-      padding: 10px;
-      border-radius: 20px;
-      border: none;
-      margin-top: 8px;
-      cursor: pointer;
-    }
-
-    /* VIP PAYWALL MODAL */
+    /* Paywall Modal */
     #paywall-modal {
       display: none;
       position: fixed;
@@ -656,20 +486,19 @@
       cursor: pointer;
     }
 
-    /* FIXED BOTTOM APP BAR */
+    /* Fixed Bottom App Navigation */
     .bottom-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 58px;
-      background: rgba(7, 7, 9, 0.98);
-      backdrop-filter: blur(12px);
+      height: 60px;
+      background: #08080a;
       border-top: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-around;
-      z-index: 120;
+      z-index: 300;
     }
     .bottom-tab {
       display: flex;
@@ -679,7 +508,6 @@
       font-size: 9px;
       font-weight: 700;
       color: var(--text-gray);
-      text-decoration: none;
       cursor: pointer;
     }
     .bottom-tab.active {
@@ -694,24 +522,23 @@
 
   <!-- Top App Bar -->
   <header>
-    <div class="brand-logo" onclick="switchTab('home')">
+    <div class="brand-logo" onclick="switchNav('home')">
       <span class="b-blue">V</span><span class="b-orange">MX</span>
     </div>
     <div class="header-links">
-      <span class="active" onclick="filterHeader('ALL', this)">ALL</span>
-      <span onclick="filterHeader('MOVIES', this)">MOVIES</span>
-      <span onclick="filterHeader('SERIES', this)">SERIES</span>
+      <span class="active" onclick="setHeaderTab(this)">ALL</span>
+      <span onclick="setHeaderTab(this)">MOVIES</span>
+      <span onclick="setHeaderTab(this)">SERIES</span>
     </div>
   </header>
 
-  <!-- Sticky Video Player Screen -->
+  <!-- Sticky Video Player -->
   <div id="player-wrap">
     <iframe id="video-frame" src="" allowfullscreen allow="autoplay"></iframe>
   </div>
 
-  <!-- 1. HOME SCREEN VIEW -->
-  <div id="home-view" class="screen-view active">
-    <!-- Billboard -->
+  <!-- 1. HOME SCREEN -->
+  <div id="home-page" class="screen-page active-page">
     <div class="hero-billboard">
       <div class="hero-title">MY SWEETHEART GIRLFRIEND</div>
       <div class="hero-meta">
@@ -736,57 +563,94 @@
 
     <!-- Featured Artists -->
     <div class="section-head">FEATURED ARTISTS</div>
-    <div class="carousel-rail" id="artists-rail"></div>
+    <div class="carousel-rail">
+      <div class="artist-item"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" class="artist-avatar"><div class="artist-title">Christine</div></div>
+      <div class="artist-item"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80" class="artist-avatar"><div class="artist-title">Angela</div></div>
+      <div class="artist-item"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80" class="artist-avatar"><div class="artist-title">Ayanna</div></div>
+      <div class="artist-item"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" class="artist-avatar"><div class="artist-title">Ataska</div></div>
+      <div class="artist-item"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" class="artist-avatar"><div class="artist-title">Robb</div></div>
+    </div>
 
     <!-- Top 10 Today -->
     <div class="section-head">TOP 10 TODAY</div>
-    <div class="carousel-rail" id="top10-rail"></div>
+    <div class="carousel-rail">
+      <div class="top10-item" onclick="openPaywall('DUTDOT')"><div class="top10-rank">1</div><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80" class="top10-art"></div>
+      <div class="top10-item" onclick="openPaywall('SECRET ESCAPE')"><div class="top10-rank">2</div><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300&q=80" class="top10-art"></div>
+      <div class="top10-item" onclick="openPaywall('VELVET DESIRE')"><div class="top10-rank">3</div><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=300&q=80" class="top10-art"></div>
+      <div class="top10-item" onclick="openPaywall('MIDNIGHT')"><div class="top10-rank">4</div><img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80" class="top10-art"></div>
+    </div>
 
-    <!-- Originals -->
+    <!-- VMX Originals -->
     <div class="section-head">
       VMX ORIGINALS
       <span class="see-all" onclick="openPaywall('All Originals')">See All</span>
     </div>
-    <div class="carousel-rail" id="originals-rail"></div>
+    <div class="carousel-rail">
+      <div class="poster-card" onclick="openPaywall('DUTDOT: UNCUT')"><span class="badge-status vip">VIP</span><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80"><div class="card-name">DUTDOT: UNCUT</div></div>
+      <div class="poster-card" onclick="openPaywall('SECRET ESCAPE')"><span class="badge-status vip">VIP</span><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300&q=80"><div class="card-name">SECRET ESCAPE</div></div>
+      <div class="poster-card" onclick="openPaywall('VELVET DESIRE')"><span class="badge-status vip">VIP</span><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=300&q=80"><div class="card-name">VELVET DESIRE</div></div>
+    </div>
 
     <!-- Free Previews -->
     <div class="section-head">FREE PREVIEWS & SHORTS</div>
-    <div class="carousel-rail" id="free-rail"></div>
+    <div class="carousel-rail">
+      <div class="poster-card" onclick="playVideo('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')"><span class="badge-status free">FREE</span><img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=300&q=80"><div class="card-name">ISLA PREVIEWS</div></div>
+      <div class="poster-card" onclick="playVideo('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')"><span class="badge-status free">FREE</span><img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=300&q=80"><div class="card-name">BEHIND SCENES</div></div>
+    </div>
   </div>
 
-  <!-- 2. SEARCH SCREEN VIEW (From Screenshot 38614) -->
-  <div id="search-view" class="screen-view">
+  <!-- 2. SEARCH SCREEN -->
+  <div id="search-page" class="screen-page">
     <div class="search-input-box">
       <span style="color: var(--text-gray);">🔍</span>
-      <input type="text" placeholder="Search VMX" oninput="liveSearch(this.value)" />
+      <input type="text" placeholder="Search VMX" />
     </div>
-
     <div class="search-subhead">Alternatively, check out these popular categories:</div>
     <div class="genre-pill-grid">
-      <button class="genre-pill" onclick="alert('Filtered: ACTION')">ACTION</button>
-      <button class="genre-pill" onclick="alert('Filtered: SEXY')">SEXY</button>
-      <button class="genre-pill" onclick="alert('Filtered: COMEDY')">COMEDY</button>
-      <button class="genre-pill" onclick="alert('Filtered: DRAMA')">DRAMA</button>
-      <button class="genre-pill" onclick="alert('Filtered: ROMANCE')">ROMANCE</button>
-      <button class="genre-pill" onclick="alert('Filtered: HORROR')">HORROR</button>
-      <button class="genre-pill" onclick="alert('Filtered: KOREAN')">KOREAN</button>
-      <button class="genre-pill" onclick="alert('Filtered: ASIAN')">ASIAN</button>
-      <button class="genre-pill" onclick="alert('Filtered: HOLLYWOOD')">HOLLYWOOD</button>
-      <button class="genre-pill" onclick="alert('Filtered: CONCERTS')">CONCERTS</button>
+      <button class="genre-pill" onclick="alert('Category: ACTION')">ACTION</button>
+      <button class="genre-pill" onclick="alert('Category: SEXY')">SEXY</button>
+      <button class="genre-pill" onclick="alert('Category: COMEDY')">COMEDY</button>
+      <button class="genre-pill" onclick="alert('Category: DRAMA')">DRAMA</button>
+      <button class="genre-pill" onclick="alert('Category: ROMANCE')">ROMANCE</button>
+      <button class="genre-pill" onclick="alert('Category: HORROR')">HORROR</button>
+      <button class="genre-pill" onclick="alert('Category: KOREAN')">KOREAN</button>
+      <button class="genre-pill" onclick="alert('Category: ASIAN')">ASIAN</button>
+      <button class="genre-pill" onclick="alert('Category: HOLLYWOOD')">HOLLYWOOD</button>
+      <button class="genre-pill" onclick="alert('Category: CONCERTS')">CONCERTS</button>
     </div>
-    <div id="search-results-grid" style="margin-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;"></div>
   </div>
 
-  <!-- 3. DOWNLOADS SCREEN VIEW (From Screenshot 38613) -->
-  <div id="downloads-view" class="screen-view">
+  <!-- 3. DOWNLOADS SCREEN -->
+  <div id="downloads-page" class="screen-page">
     <div class="dl-title">Downloads</div>
     <div class="dl-desc">Log in to download your favorite shows and be entertained while you're offline!</div>
-    <button class="btn-login-blue" onclick="openLoginModal()">Log In</button>
+    <button class="btn-login-blue" onclick="openPaywall('Downloads Access')">Log In</button>
   </div>
 
-  <!-- 4. PROFILE SCREEN VIEW (From Screenshot 38612) -->
-  <div id="profile-view" class="screen-view">
+  <!-- 4. PROFILE SCREEN -->
+  <div id="profile-page" class="screen-page">
     <div class="profile-guest-name">Guest</div>
-    <div class="profile-login-link" onclick="openLoginModal()">Log In or Sign Up</div>
+    <div class="profile-login-link" onclick="openPaywall('VIP Account')">Log In or Sign Up</div>
+    <div class="profile-group-label">⚙ Settings</div>
+    <div class="profile-item-row" onclick="alert('Playback Quality Settings')">
+      <span>Video Playback</span>
+      <span style="color: var(--text-gray);">></span>
+    </div>
+    <div class="profile-divider"></div>
+    <div class="profile-group-label">📋 Others</div>
+    <div class="profile-item-row" onclick="alert('App Version 4.63.3 PWA')">
+      <span>System Information</span>
+      <span style="color: var(--text-gray);">></span>
+    </div>
+    <div class="profile-item-row" onclick="openPaywall('VIP Support')">
+      <span>Help Center</span>
+      <span style="color: var(--text-gray);">></span>
+    </div>
+    <div class="profile-item-row" onclick="alert('Privacy Policy LeisureMax')">
+      <span>Privacy Policy</span>
+      <span style="color: var(--text-gray);">></span>
+    </div>
+    <div class="app-version-tag">Version 4.63.3</div>
+  </div>
 
-    <div class="profile-group-label">⚙ 
+  <!-- VIP PAYWALL MO
