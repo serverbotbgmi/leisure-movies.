@@ -459,7 +459,141 @@
       <h3>VIP Exclusive</h3>
       <p id="vip-movie-name">Subscribe to get instant unlimited streaming to this movie and full uncut library.</p>
       
-      <div class="price-tag">₹149 <span>/ month</span></div>
+      <div class="price-tag">$5 <span>/ month</span></div>
 
       <!-- Replace the link below with your payment link, Patreon, or UPI checkout -->
-      <a href="https://example.com/payment" class="btn-
+            <a href="https://www.paypal.com/ncp/payment/GFPH6M9LVQ5HU" class="btn-pay-action" target="_blank">Unlock VIP Access</a>
+      <button class="btn-cancel" onclick="closeVIPModal()">Not Now</button>
+    </div>
+  </div>
+
+  <!-- Bottom App Navigation Bar -->
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <div class="nav-icon">🏠</div>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" onclick="openVIPModal('VIP Pass')">
+      <div class="nav-icon">👑</div>
+      <span>VIP Pass</span>
+    </div>
+    <div class="nav-item" onclick="alert('Search feature coming soon!')">
+      <div class="nav-icon">🔍</div>
+      <span>Search</span>
+    </div>
+  </div>
+
+  <script>
+    // Movie Catalog Data - Edit your titles, posters, and stream links here
+    const catalog = [
+      {
+        id: 1,
+        title: "DUTDOT: UNCUT",
+        genre: "Drama • 2026",
+        type: "vip",
+        poster: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      },
+      {
+        id: 2,
+        title: "SECRET ESCAPE",
+        genre: "Romance • 2026",
+        type: "vip",
+        poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      },
+      {
+        id: 3,
+        title: "MIDNIGHT RENDEZVOUS",
+        genre: "Thriller • 2026",
+        type: "vip",
+        poster: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      },
+      {
+        id: 4,
+        title: "OFFICIAL TRAILER: ISLA",
+        genre: "Trailer • Free",
+        type: "free",
+        poster: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      },
+      {
+        id: 5,
+        title: "BEHIND THE SCENES",
+        genre: "Extras • Free",
+        type: "free",
+        poster: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=400&q=80",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      },
+      {
+        id: 6,
+        title: "VELVET DESIRE",
+        genre: "Romance • 2026",
+        type: "vip",
+        poster: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=400&q=80",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      }
+    ];
+
+    function renderMovies() {
+      const vipContainer = document.getElementById("vip-carousel");
+      const freeContainer = document.getElementById("free-carousel");
+      const trendContainer = document.getElementById("trending-carousel");
+
+      catalog.forEach(item => {
+        const card = createCard(item);
+        if (item.type === 'vip') {
+          vipContainer.appendChild(card);
+        } else {
+          freeContainer.appendChild(card);
+        }
+        trendContainer.appendChild(createCard(item));
+      });
+    }
+
+    function createCard(item) {
+      const el = document.createElement("div");
+      el.className = "movie-card";
+      el.innerHTML = `
+        <div class="poster-box">
+          <span class="poster-badge ${item.type === 'vip' ? 'badge-vip' : 'badge-free'}">${item.type.toUpperCase()}</span>
+          <img src="${item.poster}" alt="${item.title}">
+        </div>
+        <div class="movie-meta">
+          <div class="movie-name">${item.title}</div>
+          <div class="movie-genre">${item.genre}</div>
+        </div>
+      `;
+      el.onclick = () => {
+        if (item.type === 'vip') {
+          openVIPModal(item.title);
+        } else {
+          playTrailer(item.videoUrl);
+        }
+      };
+      return el;
+    }
+
+    function playTrailer(url) {
+      const wrap = document.getElementById("player-wrap");
+      const frame = document.getElementById("video-frame");
+      wrap.style.display = "block";
+      frame.src = url;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openVIPModal(title) {
+      document.getElementById("vip-movie-name").innerText = `"${title}" requires a VIP Subscription to stream in Full HD.`;
+      document.getElementById("paywall-modal").style.display = "flex";
+    }
+
+    function closeVIPModal() {
+      document.getElementById("paywall-modal").style.display = "none";
+    }
+
+    renderMovies();
+  </script>
+</body>
+</html>
+
