@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Leisure Movies</title>
+  <meta name="theme-color" content="#111111" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0b0b0f; color: #ffffff; padding-bottom: 70px; }
+    
+    /* Header */
+    header { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: rgba(11,11,15,0.9); position: sticky; top: 0; z-index: 50; }
+    .brand { font-size: 20px; font-weight: 800; color: #ff0055; letter-spacing: 1px; }
+    
+    /* Player Modal */
+    #player-container { display: none; background: #000; position: sticky; top: 0; width: 100%; aspect-ratio: 16/9; z-index: 100; }
+    #video-frame { width: 100%; height: 100%; border: none; }
+    
+    /* Hero Banner */
+    .hero { position: relative; width: 100%; height: 260px; background: linear-gradient(to bottom, rgba(0,0,0,0.1), #0b0b0f), url('https://picsum.photos/seed/moviehero/800/500') center/cover; display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; }
+    .hero h1 { font-size: 22px; font-weight: bold; margin-bottom: 6px; }
+    .badge { display: inline-block; background: #ff0055; color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: bold; width: fit-content; margin-bottom: 8px; }
+    
+    /* Grid */
+    .section-title { font-size: 16px; font-weight: 700; margin: 16px; letter-spacing: 0.5px; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
+    .card { background: #16171f; border-radius: 8px; overflow: hidden; position: relative; border: 1px solid #222; }
+    .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
+    .card-info { padding: 10px; }
+    .card-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-tag { font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 3px; position: absolute; top: 8px; right: 8px; text-transform: uppercase; }
+    .tag-free { background: #00e676; color: #000; }
+    .tag-paid { background: #e50914; color: #fff; }
+    
+    /* Modal / Paywall */
+    #paywall-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+    .modal-box { background: #1c1d27; border-radius: 12px; padding: 24px; text-align: center; max-width: 320px; width: 100%; border: 1px solid #ff0055; }
+    .modal-box h3 { color: #ff0055; margin-bottom: 8px; }
+    .modal-box p { font-size: 13px; color: #ccc; margin-bottom: 20px; }
+    .btn-pay { display: block; background: #ff0055; color: #fff; text-decoration: none; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-bottom: 10px; }
+    .btn-close { background: transparent; border: none; color: #888; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">LEISURE MOVIES</div>
+  </header>
+
+  <!-- Player Screen -->
+  <div id="player-container">
+    <iframe id="video-frame" src="" allowfullscreen allow="autoplay"></iframe>
+  </div>
+
+  <!-- Hero Preview -->
+  <div class="hero">
+    <span class="badge">PREMIERE</span>
+    <h1>DUTDOT (2026)</h1>
+    <p style="font-size:12px; color:#aaa;">Official Trailer • Free</p>
+  </div>
+
+  <h2 class="section-title">Latest Releases</h2>
+  <div class="grid" id="movie-grid"></div>
+
+  <!-- VIP Paywall Popup -->
+  <div id="paywall-modal">
+    <div class="modal-box">
+      <h3>VIP Exclusive</h3>
+      <p id="paywall-desc">Subscribe to unlock and stream this premium movie in full HD.</p>
+      <a href="https://example.com/payment" class="btn-pay" target="_blank">Unlock Full Access</a>
+      <button class="btn-close" onclick="closePaywall()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const movies = [
+      {
+        title: "DUTDOT (2026) Trailer",
+        type: "free",
+        poster: "https://picsum.photos/seed/dutdot/300/450",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      },
+      {
+        title: "MY H.E.N.T.A.I GIRLFRIEND",
+        type: "paid",
+        poster: "https://picsum.photos/seed/hentaigf/300/450",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      },
+      {
+        title: "ISLA (2026)",
+        type: "free",
+        poster: "https://picsum.photos/seed/isla/300/450",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      },
+      {
+        title: "SLIP (2026)",
+        type: "paid",
+        poster: "https://picsum.photos/seed/slip/300/450",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+      }
+    ];
+
+    const grid = document.getElementById("movie-grid");
+    movies.forEach(m => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <span class="card-tag ${m.type === 'free' ? 'tag-free' : 'tag-paid'}">${m.type}</span>
+        <img src="${m.poster}" alt="${m.title}">
+        <div class="card-info">
+          <div class="card-title">${m.title}</div>
+        </div>
+      `;
+      card.onclick = () => handlePlay(m);
+      grid.appendChild(card);
+    });
+
+    function handlePlay(movie) {
+      if (movie.type === 'paid') {
+        document.getElementById('paywall-desc').innerText = `"${movie.title}" requires a VIP Subscription to stream.`;
+        document.getElementById('paywall-modal').style.display = 'flex';
+      } else {
+        const player = document.getElementById('player-container');
+        const frame = document.getElementById('video-frame');
+        player.style.display = 'block';
+        frame.src = movie.videoUrl;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function closePaywall() {
+      document.getElementById('paywall-modal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
