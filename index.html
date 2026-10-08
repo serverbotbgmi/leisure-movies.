@@ -3,81 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>LeisureMax - Watch Movies & Series</title>
-  <meta name="theme-color" content="#0a0a0c" />
+  <title>VMX Stream</title>
+  <meta name="theme-color" content="#070709" />
   <link rel="manifest" href="manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --bg: #09090b;
-      --card-bg: #141419;
-      --accent: #e50914;
-      --accent-glow: rgba(229, 9, 20, 0.35);
-      --gold: #f59e0b;
-      --text-muted: #8e8e93;
+      --bg: #070709;
+      --card-bg: #121217;
+      --vmx-blue: #0084ff;
+      --vmx-orange: #ff7700;
+      --vmx-gold: #ffaa00;
+      --text-gray: #8f92a1;
+      --border: rgba(255, 255, 255, 0.08);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
       background-color: var(--bg);
       color: #ffffff;
-      padding-bottom: 90px;
+      padding-bottom: 74px;
       overflow-x: hidden;
       user-select: none;
     }
 
-    /* Vivamax Header */
+    /* VMX Top Bar */
     header {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 60px;
+      height: 52px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 16px;
-      background: linear-gradient(180deg, rgba(9,9,11,0.95) 0%, rgba(9,9,11,0.6) 70%, transparent 100%);
-      backdrop-filter: blur(8px);
-      z-index: 90;
+      background: linear-gradient(180deg, rgba(7,7,9,0.95) 0%, rgba(7,7,9,0.5) 75%, transparent 100%);
+      z-index: 100;
     }
 
-    .brand {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      color: #fff;
-    }
-    .brand span {
-      color: var(--accent);
-      text-shadow: 0 0 12px var(--accent-glow);
-    }
-
-    .vip-pill {
-      background: linear-gradient(135deg, #d97706, #f59e0b);
-      color: #000;
-      font-weight: 800;
-      font-size: 11px;
-      padding: 5px 12px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 10px rgba(245, 158, 11, 0.4);
+    .brand-logo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
       cursor: pointer;
     }
+    .brand-logo .b-blue { color: var(--vmx-blue); }
+    .brand-logo .b-orange { color: var(--vmx-orange); }
 
-    /* Video Player Container */
+    .header-links {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .header-links span {
+      color: var(--text-gray);
+      cursor: pointer;
+    }
+    .header-links span.active {
+      color: #fff;
+      border-bottom: 2px solid var(--vmx-orange);
+      padding-bottom: 3px;
+    }
+
+    /* Screen Views Manager */
+    .screen-view {
+      display: none;
+      min-height: 100vh;
+    }
+    .screen-view.active {
+      display: block;
+    }
+
+    /* Sticky Video Player */
     #player-wrap {
       display: none;
       position: sticky;
@@ -85,8 +94,8 @@
       width: 100%;
       aspect-ratio: 16/9;
       background: #000;
-      z-index: 100;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+      z-index: 150;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.9);
     }
     #video-frame {
       width: 100%;
@@ -94,313 +103,589 @@
       border: none;
     }
 
-    /* Featured Vivamax Billboard */
-    .billboard {
+    /* Hero Billboard */
+    .hero-billboard {
       position: relative;
       width: 100%;
       height: 480px;
-      background: linear-gradient(180deg, rgba(9,9,11,0.1) 0%, rgba(9,9,11,0.6) 65%, var(--bg) 100%),
+      background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(7,7,9,0.65) 60%, var(--bg) 100%),
                   url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80') center/cover;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 20px 16px;
-    }
-
-    .badge-row {
-      display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
+      padding: 0 16px 20px;
+      text-align: center;
     }
 
-    .badge-tag {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(4px);
-      padding: 3px 8px;
-      border-radius: 4px;
+    .hero-title {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+    }
+
+    .hero-meta {
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-    .badge-tag.rating {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .billboard-title {
-      font-size: 28px;
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-
-    .billboard-sub {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
-
-    .btn-row {
+      color: var(--text-gray);
+      margin-bottom: 18px;
       display: flex;
-      gap: 10px;
-    }
-
-    .btn-main {
-      flex: 1;
-      background: #fff;
-      color: #000;
-      font-weight: 700;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       gap: 8px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .btn-secondary {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.18);
-      color: #fff;
-      font-weight: 700;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-size: 14px;
-      cursor: pointer;
     }
-
-    /* Carousel Sections */
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 16px 10px;
-    }
-
-    .section-title {
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: 0.3px;
-    }
-
-    .see-all {
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .carousel {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding: 4px 16px;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-    }
-    .carousel::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* Movie Cards */
-    .movie-card {
-      flex: 0 0 135px;
-      scroll-snap-align: start;
-      position: relative;
-      border-radius: 10px;
-      overflow: hidden;
-      background: var(--card-bg);
-      cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .poster-box {
-      width: 100%;
-      height: 195px;
-      position: relative;
-    }
-
-    .poster-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .poster-badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      font-size: 10px;
-      font-weight: 800;
+    .hero-meta .tag {
+      background: rgba(255,255,255,0.18);
       padding: 2px 6px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .badge-free {
-      background: #10b981;
-      color: #000;
-    }
-    .badge-vip {
-      background: linear-gradient(135deg, #e50914, #ff334b);
+      border-radius: 3px;
       color: #fff;
-      box-shadow: 0 2px 6px rgba(229, 9, 20, 0.4);
     }
 
-    .movie-meta {
-      padding: 8px 10px 12px;
-    }
-
-    .movie-name {
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 2px;
-    }
-
-    .movie-genre {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    /* Paywall Modal */
-    #paywall-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(12px);
-      z-index: 200;
+    .hero-controls {
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-    }
-
-    .paywall-card {
-      background: linear-gradient(180deg, #181920 0%, #101015 100%);
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
+      gap: 24px;
       width: 100%;
-      max-width: 330px;
-      border: 1px solid rgba(229, 9, 20, 0.4);
-      box-shadow: 0 8px 32px rgba(229, 9, 20, 0.2);
-      animation: popIn 0.2s ease-out;
     }
 
-    @keyframes popIn {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .vip-icon-banner {
-      width: 56px;
-      height: 56px;
-      margin: 0 auto 12px;
-      background: linear-gradient(135deg, #e50914, #b91c1c);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-
-    .paywall-card h3 {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 6px;
-      color: #fff;
-    }
-
-    .paywall-card p {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.4;
-      margin-bottom: 20px;
-    }
-
-    .price-tag {
-      font-size: 26px;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 16px;
-    }
-    .price-tag span {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: normal;
-    }
-
-    .btn-pay-action {
-      display: block;
-      background: linear-gradient(135deg, #e50914, #ff2d3b);
-      color: #fff;
-      text-decoration: none;
-      font-weight: 800;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 4px 16px var(--accent-glow);
-      margin-bottom: 12px;
-    }
-
-    .btn-cancel {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* Fixed Bottom App Navigation */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 64px;
-      background: rgba(9, 9, 11, 0.94);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      z-index: 95;
-    }
-
-    .nav-item {
+    .ctrl-btn {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
       font-size: 10px;
       font-weight: 700;
-      color: var(--text-muted);
-      text-decoration: none;
+      color: #fff;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+    .ctrl-btn .icon {
+      font-size: 20px;
+    }
+
+    .btn-vmx-sub {
+      background: linear-gradient(135deg, var(--vmx-orange), var(--vmx-gold));
+      color: #000;
+      font-weight: 900;
+      font-size: 13px;
+      padding: 13px 26px;
+      border-radius: 30px;
+      border: none;
+      box-shadow: 0 4px 18px rgba(255, 119, 0, 0.45);
+      letter-spacing: 0.5px;
       cursor: pointer;
     }
 
-    .nav-item.active {
-      color: var(--accent);
+    /* Rails and Sections */
+    .section-head {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 22px 16px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-head .see-all {
+      font-size: 11px;
+      color: var(--vmx-orange);
+      cursor: pointer;
+      text-transform: none;
     }
 
-    .nav-icon {
+    .carousel-rail {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 0 16px;
+      scrollbar-width: none;
+    }
+    .carousel-rail::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Standard Poster Card */
+    .poster-card {
+      flex: 0 0 115px;
+      position: relative;
+      cursor: pointer;
+    }
+    .poster-card img {
+      width: 100%;
+      height: 168px;
+      border-radius: 6px;
+      object-fit: cover;
+      display: block;
+      border: 1px solid var(--border);
+    }
+    .poster-card .card-name {
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .poster-card .badge-status {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-size: 8px;
+      font-weight: 800;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+    .badge-status.vip { background: #e50914; color: #fff; }
+    .badge-status.free { background: #10b981; color: #000; }
+
+    /* Circular Featured Artists */
+    .artist-item {
+      flex: 0 0 82px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .artist-avatar {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--vmx-orange);
+      padding: 2px;
+      background: #111;
+    }
+    .artist-title {
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 6px;
+      text-align: center;
+      color: #eee;
+    }
+
+    /* Numbered TOP 10 Rail */
+    .top10-item {
+      flex: 0 0 145px;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      cursor: pointer;
+    }
+    .top10-rank {
+      font-size: 92px;
+      font-weight: 900;
+      line-height: 0.8;
+      color: #000;
+      -webkit-text-stroke: 3px #555;
+      margin-right: -24px;
+      z-index: 2;
+    }
+    .top10-art {
+      width: 105px;
+      height: 155px;
+      border-radius: 6px;
+      object-fit: cover;
+      z-index: 1;
+      border: 1px solid var(--border);
+    }
+
+    /* SEARCH SCREEN (Screenshot 38614) */
+    #search-view {
+      padding: 60px 16px 20px;
+    }
+    .search-input-box {
+      width: 100%;
+      height: 44px;
+      background: #16181f;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .search-input-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      width: 100%;
+    }
+    .search-subhead {
+      font-size: 12px;
+      color: var(--text-gray);
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+    .genre-pill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .genre-pill {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: transparent;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .genre-pill:active {
+      background: var(--vmx-orange);
+      border-color: var(--vmx-orange);
+    }
+
+    /* DOWNLOADS SCREEN (Screenshot 38613) */
+    #downloads-view {
+      padding: 70px 24px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+    }
+    .dl-title {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+    .dl-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+      max-width: 280px;
+      margin-bottom: 24px;
+    }
+    .btn-login-blue {
+      background: var(--vmx-blue);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 13px 40px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      max-width: 250px;
+      box-shadow: 0 4px 16px rgba(0, 132, 255, 0.35);
+    }
+
+    /* PROFILE SCREEN (Screenshot 38612) */
+    #profile-view {
+      padding: 70px 20px 20px;
+    }
+    .profile-guest-name {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+    .profile-login-link {
+      color: var(--vmx-blue);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .profile-group-label {
+      font-size: 15px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      margin-top: 18px;
+      color: #fff;
+    }
+    .profile-item-row {
+      padding: 14px 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #dedee4;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+    }
+    .profile-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 10px 0;
+    }
+    .app-version-tag {
+      font-size: 11px;
+      color: var(--text-gray);
+      margin-top: 24px;
+      font-weight: 600;
+    }
+
+    /* FULL VMX LOGIN MODAL (Screenshot 38610) */
+    #login-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 400;
+      overflow-y: auto;
+      padding: 30px 20px 40px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+    }
+    .login-top-explore {
+      align-self: flex-end;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--vmx-blue);
+      cursor: pointer;
+    }
+    .login-center-box {
+      margin: auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .login-vmx-logo {
+      font-size: 46px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .login-headline {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.4;
+      max-width: 300px;
+      margin-bottom: 30px;
+    }
+    .btn-login-cta {
+      width: 100%;
+      max-width: 310px;
+      background: var(--vmx-blue);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 14px;
+      border-radius: 25px;
+      border: none;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    .login-signup-txt {
+      font-size: 13px;
+      color: var(--text-gray);
+      font-weight: 600;
+    }
+    .login-signup-txt span {
+      color: var(--vmx-orange);
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .login-terms {
+      font-size: 10px;
+      color: var(--text-gray);
+      margin-top: 30px;
+      line-height: 1.5;
+    }
+    .login-terms a {
+      color: var(--vmx-blue);
+      text-decoration: underline;
+    }
+    .login-restore {
+      margin-top: 14px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #5c6280;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+    }
+
+    /* GDPR / DATA CONSENT POPUP (Screenshot 38611) */
+    #consent-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .consent-card {
+      background: #ffffff;
+      color: #000;
+      border-radius: 16px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 330px;
+      position: relative;
+    }
+    .consent-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #eee;
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .consent-vmx-icon {
+      background: #000;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .consent-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.35;
+      margin-bottom: 16px;
+    }
+    .consent-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 11px;
+      line-height: 1.3;
+      color: #444;
+      text-align: left;
+    }
+    .btn-consent-agree {
+      background: var(--vmx-blue);
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 20px;
+      border: none;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .btn-consent-manage {
+      background: #f0f0f5;
+      color: #222;
+      font-weight: 700;
+      font-size: 12px;
+      width: 100%;
+      padding: 10px;
+      border-radius: 20px;
+      border: none;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    /* VIP PAYWALL MODAL */
+    #paywall-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 450;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .paywall-content {
+      background: #121217;
+      border-radius: 16px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+      border: 1px solid rgba(255, 119, 0, 0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+    .paywall-content h3 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .paywall-content p {
+      font-size: 12px;
+      color: var(--text-gray);
+      margin-bottom: 18px;
+    }
+    .paywall-price {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--vmx-orange);
+      margin-bottom: 16px;
+    }
+    .btn-vip-checkout {
+      display: block;
+      background: linear-gradient(135deg, var(--vmx-orange), var(--vmx-gold));
+      color: #000;
+      font-weight: 900;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 25px;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .btn-modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-gray);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* FIXED BOTTOM APP BAR */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 58px;
+      background: rgba(7, 7, 9, 0.98);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 120;
+    }
+    .bottom-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-gray);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .bottom-tab.active {
+      color: var(--vmx-orange);
+    }
+    .bottom-tab .tab-icon {
       font-size: 18px;
     }
   </style>
@@ -409,191 +694,99 @@
 
   <!-- Top App Bar -->
   <header>
-    <div class="brand">LEISURE<span>MAX</span></div>
-    <div class="vip-pill" onclick="openVIPModal('All VIP Movies')">★ GO VIP</div>
+    <div class="brand-logo" onclick="switchTab('home')">
+      <span class="b-blue">V</span><span class="b-orange">MX</span>
+    </div>
+    <div class="header-links">
+      <span class="active" onclick="filterHeader('ALL', this)">ALL</span>
+      <span onclick="filterHeader('MOVIES', this)">MOVIES</span>
+      <span onclick="filterHeader('SERIES', this)">SERIES</span>
+    </div>
   </header>
 
-  <!-- Sticky Video Player (Shown during free trailer/playback) -->
+  <!-- Sticky Video Player Screen -->
   <div id="player-wrap">
     <iframe id="video-frame" src="" allowfullscreen allow="autoplay"></iframe>
   </div>
 
-  <!-- Vivamax Style Hero Billboard -->
-  <div class="billboard" id="billboard">
-    <div class="badge-row">
-      <span class="badge-tag rating">18+</span>
-      <span class="badge-tag">HD</span>
-      <span class="badge-tag">ORIGINAL</span>
+  <!-- 1. HOME SCREEN VIEW -->
+  <div id="home-view" class="screen-view active">
+    <!-- Billboard -->
+    <div class="hero-billboard">
+      <div class="hero-title">MY SWEETHEART GIRLFRIEND</div>
+      <div class="hero-meta">
+        <span class="tag">18+</span>
+        <span class="tag">HD</span>
+        <span>Romance • Drama</span>
+      </div>
+      <div class="hero-controls">
+        <button class="ctrl-btn" onclick="alert('Added to My List')">
+          <span class="icon">＋</span>
+          <span>My List</span>
+        </button>
+        <button class="btn-vmx-sub" onclick="openPaywall('MY SWEETHEART GIRLFRIEND')">
+          ▶ SUBSCRIBE TO WATCH
+        </button>
+        <button class="ctrl-btn" onclick="playVideo('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')">
+          <span class="icon">ℹ</span>
+          <span>Trailer</span>
+        </button>
+      </div>
     </div>
-    <div class="billboard-title">DUTDOT: UNCUT</div>
-    <div class="billboard-sub">Drama • Romance • 1h 48m</div>
-    <div class="btn-row">
-      <button class="btn-main" onclick="playTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')">▶ Play Trailer</button>
-      <button class="btn-secondary" onclick="openVIPModal('DUTDOT: UNCUT')">★ Watch Full HD</button>
+
+    <!-- Featured Artists -->
+    <div class="section-head">FEATURED ARTISTS</div>
+    <div class="carousel-rail" id="artists-rail"></div>
+
+    <!-- Top 10 Today -->
+    <div class="section-head">TOP 10 TODAY</div>
+    <div class="carousel-rail" id="top10-rail"></div>
+
+    <!-- Originals -->
+    <div class="section-head">
+      VMX ORIGINALS
+      <span class="see-all" onclick="openPaywall('All Originals')">See All</span>
     </div>
+    <div class="carousel-rail" id="originals-rail"></div>
+
+    <!-- Free Previews -->
+    <div class="section-head">FREE PREVIEWS & SHORTS</div>
+    <div class="carousel-rail" id="free-rail"></div>
   </div>
 
-  <!-- Rail 1: Vivamax Originals (VIP Only) -->
-  <div class="section-header">
-    <div class="section-title">Vivamax Originals & VIP</div>
-    <a href="#" class="see-all" onclick="openVIPModal('VIP Subscription')">Unlock All</a>
-  </div>
-  <div class="carousel" id="vip-carousel"></div>
-
-  <!-- Rail 2: Free Trailers & Shorts -->
-  <div class="section-header">
-    <div class="section-title">Free to Watch</div>
-  </div>
-  <div class="carousel" id="free-carousel"></div>
-
-  <!-- Rail 3: Trending Movies -->
-  <div class="section-header">
-    <div class="section-title">Trending This Week</div>
-  </div>
-  <div class="carousel" id="trending-carousel"></div>
-
-  <!-- Subscription / Paywall Modal -->
-  <div id="paywall-modal">
-    <div class="paywall-card">
-      <div class="vip-icon-banner">👑</div>
-      <h3>VIP Exclusive</h3>
-      <p id="vip-movie-name">Subscribe to get instant unlimited streaming to this movie and full uncut library.</p>
-      
-      <div class="price-tag">$5 <span>/ month</span></div>
-
-      <!-- Replace the link below with your payment link, Patreon, or UPI checkout -->
-            <a href="https://www.paypal.com/ncp/payment/GFPH6M9LVQ5HU" class="btn-pay-action" target="_blank">Unlock VIP Access</a>
-      <button class="btn-cancel" onclick="closeVIPModal()">Not Now</button>
+  <!-- 2. SEARCH SCREEN VIEW (From Screenshot 38614) -->
+  <div id="search-view" class="screen-view">
+    <div class="search-input-box">
+      <span style="color: var(--text-gray);">🔍</span>
+      <input type="text" placeholder="Search VMX" oninput="liveSearch(this.value)" />
     </div>
+
+    <div class="search-subhead">Alternatively, check out these popular categories:</div>
+    <div class="genre-pill-grid">
+      <button class="genre-pill" onclick="alert('Filtered: ACTION')">ACTION</button>
+      <button class="genre-pill" onclick="alert('Filtered: SEXY')">SEXY</button>
+      <button class="genre-pill" onclick="alert('Filtered: COMEDY')">COMEDY</button>
+      <button class="genre-pill" onclick="alert('Filtered: DRAMA')">DRAMA</button>
+      <button class="genre-pill" onclick="alert('Filtered: ROMANCE')">ROMANCE</button>
+      <button class="genre-pill" onclick="alert('Filtered: HORROR')">HORROR</button>
+      <button class="genre-pill" onclick="alert('Filtered: KOREAN')">KOREAN</button>
+      <button class="genre-pill" onclick="alert('Filtered: ASIAN')">ASIAN</button>
+      <button class="genre-pill" onclick="alert('Filtered: HOLLYWOOD')">HOLLYWOOD</button>
+      <button class="genre-pill" onclick="alert('Filtered: CONCERTS')">CONCERTS</button>
+    </div>
+    <div id="search-results-grid" style="margin-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;"></div>
   </div>
 
-  <!-- Bottom App Navigation Bar -->
-  <div class="bottom-nav">
-    <div class="nav-item active">
-      <div class="nav-icon">🏠</div>
-      <span>Home</span>
-    </div>
-    <div class="nav-item" onclick="openVIPModal('VIP Pass')">
-      <div class="nav-icon">👑</div>
-      <span>VIP Pass</span>
-    </div>
-    <div class="nav-item" onclick="alert('Search feature coming soon!')">
-      <div class="nav-icon">🔍</div>
-      <span>Search</span>
-    </div>
+  <!-- 3. DOWNLOADS SCREEN VIEW (From Screenshot 38613) -->
+  <div id="downloads-view" class="screen-view">
+    <div class="dl-title">Downloads</div>
+    <div class="dl-desc">Log in to download your favorite shows and be entertained while you're offline!</div>
+    <button class="btn-login-blue" onclick="openLoginModal()">Log In</button>
   </div>
 
-  <script>
-    // Movie Catalog Data - Edit your titles, posters, and stream links here
-    const catalog = [
-      {
-        id: 1,
-        title: "DUTDOT: UNCUT",
-        genre: "Drama • 2026",
-        type: "vip",
-        poster: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-      },
-      {
-        id: 2,
-        title: "SECRET ESCAPE",
-        genre: "Romance • 2026",
-        type: "vip",
-        poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-      },
-      {
-        id: 3,
-        title: "MIDNIGHT RENDEZVOUS",
-        genre: "Thriller • 2026",
-        type: "vip",
-        poster: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-      },
-      {
-        id: 4,
-        title: "OFFICIAL TRAILER: ISLA",
-        genre: "Trailer • Free",
-        type: "free",
-        poster: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-      },
-      {
-        id: 5,
-        title: "BEHIND THE SCENES",
-        genre: "Extras • Free",
-        type: "free",
-        poster: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=400&q=80",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-      },
-      {
-        id: 6,
-        title: "VELVET DESIRE",
-        genre: "Romance • 2026",
-        type: "vip",
-        poster: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=400&q=80",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-      }
-    ];
+  <!-- 4. PROFILE SCREEN VIEW (From Screenshot 38612) -->
+  <div id="profile-view" class="screen-view">
+    <div class="profile-guest-name">Guest</div>
+    <div class="profile-login-link" onclick="openLoginModal()">Log In or Sign Up</div>
 
-    function renderMovies() {
-      const vipContainer = document.getElementById("vip-carousel");
-      const freeContainer = document.getElementById("free-carousel");
-      const trendContainer = document.getElementById("trending-carousel");
-
-      catalog.forEach(item => {
-        const card = createCard(item);
-        if (item.type === 'vip') {
-          vipContainer.appendChild(card);
-        } else {
-          freeContainer.appendChild(card);
-        }
-        trendContainer.appendChild(createCard(item));
-      });
-    }
-
-    function createCard(item) {
-      const el = document.createElement("div");
-      el.className = "movie-card";
-      el.innerHTML = `
-        <div class="poster-box">
-          <span class="poster-badge ${item.type === 'vip' ? 'badge-vip' : 'badge-free'}">${item.type.toUpperCase()}</span>
-          <img src="${item.poster}" alt="${item.title}">
-        </div>
-        <div class="movie-meta">
-          <div class="movie-name">${item.title}</div>
-          <div class="movie-genre">${item.genre}</div>
-        </div>
-      `;
-      el.onclick = () => {
-        if (item.type === 'vip') {
-          openVIPModal(item.title);
-        } else {
-          playTrailer(item.videoUrl);
-        }
-      };
-      return el;
-    }
-
-    function playTrailer(url) {
-      const wrap = document.getElementById("player-wrap");
-      const frame = document.getElementById("video-frame");
-      wrap.style.display = "block";
-      frame.src = url;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function openVIPModal(title) {
-      document.getElementById("vip-movie-name").innerText = `"${title}" requires a VIP Subscription to stream in Full HD.`;
-      document.getElementById("paywall-modal").style.display = "flex";
-    }
-
-    function closeVIPModal() {
-      document.getElementById("paywall-modal").style.display = "none";
-    }
-
-    renderMovies();
-  </script>
-</body>
-</html>
-
+    <div class="profile-group-label">⚙ 
